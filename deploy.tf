@@ -17,6 +17,21 @@ provider "aws" {
   region = "us-east-1"
 }
 
+resource "aws_s3_bucket" "terraform_state" {
+  bucket = "simple-contact-form"
+
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+resource "aws_s3_bucket_versioning" "state_versioning" {
+  bucket = aws_s3_bucket.terraform_state.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
 resource "tls_private_key" "ssh_key" {
   algorithm = "RSA"
   rsa_bits  = 4096

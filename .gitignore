@@ -164,3 +164,4 @@ nbproject/private/
 **/app.env
 **/*terraform.tfstate**
 **/*validate.md
+**/data
