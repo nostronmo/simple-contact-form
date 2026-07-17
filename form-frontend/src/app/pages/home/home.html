@@ -1,0 +1,116 @@
+<div class="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+  <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Contact Us</h2>
+
+  @if (showSuccess()) {
+  <div
+    class="mb-4 w-full bg-green-500 text-white text-center py-3 rounded-md shadow-sm font-semibold animate-fade-in-down"
+  >
+    Message sent successfully!
+  </div>
+  } @if (store.error()) {
+  <div
+    class="mb-4 w-full bg-red-500 text-white text-center py-3 rounded-md shadow-sm font-semibold animate-fade-in-down"
+  >
+    @if (store.error() === 'MAIL_NOT_WORKING_SPRING' || store.error() ===
+    'MAIL_NOT_WORKING_PROVIDER') { Unable to connect to the mail server. Please try again later. }
+    @else { Message unable to send. Please check your connection. }
+  </div>
+  }
+  <form (submit)="onSubmit($event)">
+    <fieldset [disabled]="store.isLoading() || cooldown() > 0" class="border-0 p-0 m-0 min-w-0">
+      <div class="p-6 pt-0 space-y-4">
+        <div class="space-y-2">
+          <label
+            for="name"
+            class="text-sm font-semibold text-gray-700 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 tracking-wide cursor-pointer"
+          >
+            Name
+          </label>
+          <input
+            id="name"
+            type="text"
+            [formField]="mailForm.name"
+            placeholder="John Doe"
+            class="flex h-10 w-full rounded-md border-gray-300 bg-violet-300 border-2 px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+          />
+
+          @if (mailForm.name().invalid() && mailForm.name().touched() && cooldown() === 0) {
+          <div class="text-red-500 text-xs mt-1 block space-y-1">
+            @for (error of mailForm.name().errors(); track error.message) {
+            <span>{{ error.message }}</span>
+            }
+          </div>
+          }
+        </div>
+
+        <div class="space-y-2">
+          <label
+            for="phone"
+            class="text-sm font-semibold text-gray-700 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 tracking-wide cursor-pointer"
+          >
+            Phone Number
+          </label>
+          <input
+            id="phone"
+            type="tel"
+            [formField]="mailForm.phone"
+            placeholder="+1 (555) 000-0000"
+            class="flex h-10 w-full rounded-md border-gray-300 bg-violet-300 border-2 px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+          />
+
+          @if (mailForm.phone().invalid() && mailForm.phone().touched() && cooldown() === 0) {
+          <div class="text-red-500 text-xs mt-1 block space-y-1">
+            @for (error of mailForm.phone().errors(); track error.message) {
+            <span>{{ error.message }}</span>
+            }
+          </div>
+          }
+        </div>
+
+        <div class="space-y-2">
+          <label
+            for="content"
+            class="text-sm font-semibold text-gray-700 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 tracking-wide cursor-pointer"
+          >
+            Message
+          </label>
+          <textarea
+            id="content"
+            [formField]="mailForm.content"
+            rows="4"
+            placeholder="How can we help you?..."
+            class="flex w-full rounded-md border-gray-300 bg-violet-300 border-2 px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 resize-none"
+          ></textarea>
+
+          @if (mailForm.content().invalid() && mailForm.content().touched() && cooldown() === 0) {
+          <div class="text-red-500 text-xs mt-1 block space-y-1">
+            @for (error of mailForm.content().errors(); track error.message) {
+            <span>{{ error.message }}</span>
+            }
+          </div>
+          }
+        </div>
+
+        <button
+          type="submit"
+          class="w-full text-white font-bold py-2 px-4 rounded-md transition-colors disabled:opacity-50 flex justify-center items-center mt-6 disabled:bg-gray-400 cursor-pointer disabled:cursor-default"
+          [ngClass]="{
+                    'bg-blue-600 hover:bg-blue-700': !store.error(),
+                    'bg-red-600 hover:bg-red-700': store.error()
+                }"
+          [disabled]="mailForm().invalid() || store.isLoading() || cooldown() > 0"
+        >
+          @if (store.isLoading()) {
+          <span>Sending...</span>
+          } @else if (cooldown() > 0) {
+          <span>Please wait {{ cooldown() }}s</span>
+          } @else if (store.error()) {
+          <span>Retry Sending</span>
+          } @else {
+          <span>Send Message</span>
+          }
+        </button>
+      </div>
+    </fieldset>
+  </form>
+</div>

@@ -1,0 +1,32 @@
+{"properties": [
+  {
+    "name": "settings.cors.allowed-origins",
+    "type": "java.lang.String",
+    "description": "A description for 'settings.cors.allowed-origins'"
+  },
+  {
+    "name": "settings.cors.max-age",
+    "type": "java.lang.String",
+    "description": "A description for 'settings.cors.max-age'"
+  },
+  {
+    "name": "security.front.https-only",
+    "type": "java.lang.String",
+    "description": "A description for 'security.front.https-only'"
+  },
+  {
+    "name": "security.front.csrf",
+    "type": "java.lang.String",
+    "description": "A description for 'security.front.csrf'"
+  },
+  {
+    "name": "application.page.size",
+    "type": "java.lang.String",
+    "description": "A description for 'application.page.size'"
+  },
+  {
+    "name": "application.contact.admin-mail",
+    "type": "java.lang.String",
+    "description": "A description for 'application.contact.admin-mail'"
+  }
+]}

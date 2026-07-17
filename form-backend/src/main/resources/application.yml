@@ -1,0 +1,25 @@
+spring:
+  profiles:
+    active: logs, ${PROFILE:test}
+  application:
+    name: contact-form
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+server:
+  port: ${FORM_PORT:8000}
+  forward-headers-strategy: native #framework
+  
+logging:
+  file:
+    name: ${LOGGING_FILE_NAME:logs/app.log}
+  pattern:
+    console: '%n %d{HH:mm:ss} | %highlight(%-5level) | %cyan(%logger{30}) | %msg'
+  level:
+    root: INFO
+    org:
+      springframework: warn
+      boot: error

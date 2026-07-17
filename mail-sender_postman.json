@@ -1,0 +1,248 @@
+{
+  "info": {
+    "_postman_id": "dd517189-5433-4d4f-a3e5-43273b02d1fd",
+    "name": "Mail-Sender",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "38340143"
+  },
+  "item": [
+    {
+      "name": "Fetch System Configuration",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/config",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "config"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Find Contact By ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/v1/contact/{{contact_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v1",
+            "contact",
+            "{{contact_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Search Contact Queries",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/v1/contact/search",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v1",
+            "contact",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "0",
+              "disabled": true
+            },
+            {
+              "key": "name",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            },
+            {
+              "key": "phone",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            },
+            {
+              "key": "status",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Contact",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = pm.response.json();",
+              "if (jsonData.id) {",
+              "    pm.collectionVariables.set(\"contactId\", jsonData.id);",
+              "    console.log(\"Contact id has been set\");",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\" : \"Marcellus\",\n    \"phone\": \"55719999999\",\n    \"content\" : \"ahsdghagsdhisbahsdq\"\n\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/v1/contact",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v1",
+            "contact"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Send Mail",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/v1/contact/send/{{contactId}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v1",
+            "contact",
+            "send",
+            "{{contactId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Contact",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "    pm.collectionVariables.unset(\"contactId\");",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/v1/contact/{{contactId}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v1",
+            "contact",
+            "{{contactId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Change Contact Status",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/v1/contact/{{contactId}}?status=NOT_SENT",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "v1",
+            "contact",
+            "{{contactId}}"
+          ],
+          "query": [
+            {
+              "key": "status",
+              "value": "NOT_SENT",
+              "type": "text"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": ""
+    },
+    {
+      "key": "contactId",
+      "value": ""
+    }
+  ]
+}

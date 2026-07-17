@@ -1,0 +1,55 @@
+  // Prometheus
+
+prometheus.scrape "spring_boot" {
+  targets = [
+    { "__address__" = "127.0.0.1:8000" },
+  ]
+  metrics_path = "/actuator/prometheus"
+  scrape_interval = "60s"
+
+  forward_to = [prometheus.relabel.filter_metrics.receiver]
+}
+
+prometheus.relabel "filter_metrics" {
+  forward_to = [prometheus.remote_write.grafana_cloud.receiver]
+  rule {
+    source_labels = ["__name__"]
+    regex         = ".*_bucket"
+    action        = "drop"
+  }
+}
+
+prometheus.remote_write "grafana_cloud" {
+  endpoint {
+    url = sys.env("GRAFANA_PROMETHEUS_URL")
+    basic_auth {
+      username = sys.env("GRAFANA_PROMETHEUS_USER_ID")
+      password = sys.env("GRAFANA_PROMETHEUS_TOKEN")
+    }
+  }
+}
+
+ // LOKI
+
+local.file_match "local_files" {
+  path_targets = [
+    {__path__ = "/etc/springapp/logs/app.log", service = "contact-form"},
+    {__path__ = "/var/log/nginx/access.log", service = "nginx-access"},
+    {__path__ = "/var/log/nginx/error.log", service = "nginx-error"},
+  ]
+}
+
+loki.source.file "log_scraper" {
+  targets    = local.file_match.local_files.targets
+  forward_to = [loki.write.grafana_cloud.receiver]
+}
+
+loki.write "grafana_cloud" {
+  endpoint {
+    url = sys.env("GRAFANA_LOKI_URL")
+    basic_auth {
+      username = sys.env("GRAFANA_LOKI_USER_ID")
+      password = sys.env("GRAFANA_LOKI_TOKEN")
+    }
+  }
+}

@@ -1,0 +1,40 @@
+[tools]
+maven = "latest"
+node = "latest"
+bun = "latest"
+terraform = "latest"
+
+[env]
+_.file = ".env"
+
+[tasks.generate_env]
+description = "Generate environment files to (Circle CI)"
+run = "base64 -w 0 .env"
+
+[tasks.terraform_format]
+description = "Format Terraform Script Before Sending to (CircleCI)"
+run = "terraform fmt"
+
+[tasks.terraform_init]
+description = "Initialize Terraform working directory and download providers"
+run = "terraform init"
+
+[tasks.terraform_plan]
+description = "Generate and show a Terraform execution plan"
+run = "terraform plan"
+
+[tasks.terraform_deploy]
+description = "Apply the changes required to reach the desired state of the configuration"
+run = "terraform apply -auto-approve && ./deploy.sh"
+
+[tasks.terraform_run]
+description = "Easy Terraform reload pipeline (Destroy, Plan, Apply and Deploy)"
+run = "terraform destroy && terraform plan && terraform apply -auto-approve && ./deploy.sh"
+
+[tasks.docker_run]
+description = "Run Docker Compose Project"
+run = "docker compose up --build -d"
+
+[tasks.docker_stop]
+description = "Stop Docker Compose Project"
+run = "docker compose down"
