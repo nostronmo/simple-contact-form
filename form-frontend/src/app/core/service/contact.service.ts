@@ -28,10 +28,4 @@ export class ContactService {
       withCredentials: true,
     });
   }
-
-  sendMail(id: string): Observable<ContactResponse> {
-    return this.http.post<ContactResponse>(`${this.apiUrl}/send/${id}`, null, {
-      withCredentials: true,
-    });
-  }
 }

@@ -59,18 +59,16 @@ public class ContactService {
 			throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS,
 					"You have already submitted a contact request recently. Please wait a few minutes before trying again.");
 		}
-
 		var contact = mapper.build(request);
 		repository.save(contact);
+		mailSender.sendEmailToDefault(contact.getId());
 		return mapper.toResponse(contact);
 	}
 
 	@Transactional
 	public ContactResponse sendMail(UUID mailId) {
 		var contact = component.findById(mailId);
-		mailSender.sendEmailToDefault(contact);
-		contact.setSentTime(ZonedDateTime.now());
-		repository.save(contact);
+		mailSender.sendEmailToDefault(contact.getId());
 		return mapper.toResponse(contact);
 	}
 

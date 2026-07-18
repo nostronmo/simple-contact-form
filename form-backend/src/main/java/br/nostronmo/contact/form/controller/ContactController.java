@@ -34,14 +34,8 @@ public class ContactController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public ContactResponse createContact(@RequestBody @Valid ContactRequest request) {
+	public ContactResponse submitContactForm(@RequestBody @Valid ContactRequest request) {
 		return service.createContact(request);
-	}
-
-	@PostMapping(value = "/send/{id}")
-	@ResponseStatus(HttpStatus.ACCEPTED)
-	public ContactResponse sendMail(@PathVariable(value = "id") UUID query) {
-		return service.sendMail(query);
 	}
 
 }

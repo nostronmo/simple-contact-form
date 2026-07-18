@@ -39,31 +39,6 @@ export const ContactStore = signalStore(
       ),
     ),
 
-    sendMail: rxMethod<string>(
-      pipe(
-        tap(() => patchState(store, { isLoading: true })),
-        switchMap((id) =>
-          contactService.sendMail(id).pipe(
-            tapResponse({
-              next: (response) => patchState(store, { contact: response, isLoading: false }),
-              error: (err: HttpErrorResponse) => {
-                const backendError =
-                  err.error?.errorCode || err.error?.message || err.error || 'ERROR';
-                patchState(store, { isLoading: false, error: backendError });
-                contactService.deleteContact(id).subscribe({
-                  next: () => {
-                    patchState(store, { contact: null });
-                  },
-                });
-              },
-            }),
-          ),
-        ),
-      ),
-    ),
-  })),
-
-  withMethods((store, contactService = inject(ContactService)) => ({
     createContact: rxMethod<ContactRequest>(
       pipe(
         tap(() => patchState(store, { isLoading: true })),
@@ -72,7 +47,6 @@ export const ContactStore = signalStore(
             tapResponse({
               next: (response) => {
                 patchState(store, { contact: response });
-                store.sendMail(response.id);
               },
               error: (err: HttpErrorResponse) => {
                 const backendError =
