@@ -123,7 +123,7 @@ Group=apps
 WorkingDirectory=/etc/springapp
 EnvironmentFile=/etc/springapp/backend.env
 
-ExecStart=/usr/bin/java -jar /etc/springapp/app.jar
+ExecStart=/usr/bin/java -Xshareclasses -Xquickstart -Xmx256m -jar /etc/springapp/app.jar
 
 SuccessExitStatus=143
 TimeoutStopSec=10
